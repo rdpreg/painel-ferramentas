@@ -7,4 +7,5 @@ openpyxl
 dataframe_image
 kaleido
 matplotlib
+bcrypt
 
