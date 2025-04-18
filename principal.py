@@ -1,5 +1,5 @@
 import streamlit as st
-from ferramentas import relatorio_diario
+#from ferramentas import relatorio_diario
 
 # Inicializa o menu padrão
 if "menu" not in st.session_state:
