@@ -1,19 +1,36 @@
 import streamlit as st
-# Sidebar de navegação
+
+# Inicializa o menu ativo se não existir
+if "menu" not in st.session_state:
+    st.session_state.menu = "Ferramenta 1"
+
 st.sidebar.title("Menu")
 menu = st.sidebar.radio("Escolha uma ferramenta:", ["Ferramenta 1", "Ferramenta 2", "Ferramenta 3"])
+# Conteúdo da página principal
+st.title("Meu Web App")
+
+# Botões de menu
+if st.sidebar.button("Ferramenta 1"):
+    st.session_state.menu = "Ferramenta 1"
+
+if st.sidebar.button("Ferramenta 2"):
+    st.session_state.menu = "Ferramenta 2"
+
+if st.sidebar.button("Ferramenta 3"):
+    st.session_state.menu = "Ferramenta 3"
 
 # Conteúdo da página principal
 st.title("Meu Web App")
 
-if menu == "Ferramenta 1":
+if st.session_state.menu == "Ferramenta 1":
     st.header("Ferramenta 1")
-    # lógica e interações da ferramenta 1 aqui
+    st.write("Conteúdo da ferramenta 1 aqui.")
 
-elif menu == "Ferramenta 2":
+elif st.session_state.menu == "Ferramenta 2":
     st.header("Ferramenta 2")
-    # lógica da ferramenta 2
+    st.write("Conteúdo da ferramenta 2 aqui.")
 
-elif menu == "Ferramenta 3":
+elif st.session_state.menu == "Ferramenta 3":
     st.header("Ferramenta 3")
-    # lógica da ferramenta 3
+    st.write("Conteúdo da ferramenta 3 aqui.")
+
