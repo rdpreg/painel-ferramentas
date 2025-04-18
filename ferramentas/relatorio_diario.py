@@ -10,7 +10,7 @@ from email.mime.application import MIMEApplication
 import tempfile
 
 def executar():
-    st.title("📊 Relatório Diário de AuC por Assessor")
+    st.title("Relatório Diário de AuC por Assessor")
 
     uploaded_file = st.file_uploader("Faça upload do Excel com os dados", type=["xlsx"])
 
