@@ -1,3 +1,5 @@
+import streamlit as st
+
 # Inicializa o menu padrão
 if "menu" not in st.session_state:
     st.session_state.menu = "home"
