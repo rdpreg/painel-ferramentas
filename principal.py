@@ -18,7 +18,6 @@ if st.sidebar.button("Ferramenta 3"):
 
 # TELA PRINCIPAL
 if st.session_state.menu == "relatorio":
-    st.title("Relatório diário de AuC")
     relatorio_diario.executar()
 
 elif st.session_state.menu == "ferramenta2":
