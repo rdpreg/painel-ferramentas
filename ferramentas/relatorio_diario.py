@@ -49,13 +49,14 @@ def executar():
                 return [''] * len(row)
 
         styled = relatorio_com_total.style.apply(destaque_total, axis=1).hide(axis='index')
+        st.dataframe(styled_df, use_container_width=True)
 
         # 6. Salvar temporariamente a imagem e a planilha
         data_hoje = datetime.now().strftime('%d-%m-%Y')
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as img_file:
-            dfi.export(styled, img_file.name)
-            imagem_path = img_file.name
+        #with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as img_file:
+         #   dfi.export(styled, img_file.name)
+          #  imagem_path = img_file.name
 
         with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as excel_file:
             df.to_excel(excel_file.name, index=False)
