@@ -4,11 +4,6 @@ import streamlit as st
 if "menu" not in st.session_state:
     st.session_state.menu = "Ferramenta 1"
 
-st.sidebar.title("Menu")
-menu = st.sidebar.radio("Escolha uma ferramenta:", ["Ferramenta 1", "Ferramenta 2", "Ferramenta 3"])
-# Conteúdo da página principal
-st.title("Meu Web App")
-
 # Botões de menu
 if st.sidebar.button("Ferramenta 1"):
     st.session_state.menu = "Ferramenta 1"
