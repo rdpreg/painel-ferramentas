@@ -1,5 +1,3 @@
-import streamlit as st
-
 # Inicializa o menu padrão
 if "menu" not in st.session_state:
     st.session_state.menu = "home"
@@ -15,19 +13,19 @@ if st.sidebar.button("Ferramenta 2"):
 if st.sidebar.button("Ferramenta 3"):
     st.session_state.menu = "ferramenta3"
 
+# TELA PRINCIPAL
+if st.session_state.menu == "relatorio":
+    st.title("Relatório diário de PL")
+    # conteúdo da ferramenta
 
-# Conteúdo da página principal
-st.title("Bem-vindo(a) a área de relatórios")
+elif st.session_state.menu == "ferramenta2":
+    st.title("Ferramenta 2")
+    # conteúdo da ferramenta
 
-if st.session_state.menu == "Ferramenta 1":
-    st.header("Ferramenta 1")
-    st.write("Conteúdo da ferramenta 1 aqui.")
+elif st.session_state.menu == "ferramenta3":
+    st.title("Ferramenta 3")
+    # conteúdo da ferramenta
 
-elif st.session_state.menu == "Ferramenta 2":
-    st.header("Ferramenta 2")
-    st.write("Conteúdo da ferramenta 2 aqui.")
-
-elif st.session_state.menu == "Ferramenta 3":
-    st.header("Ferramenta 3")
-    st.write("Conteúdo da ferramenta 3 aqui.")
-
+else:
+    st.title("Bem-vindo(a) à área de relatórios")
+    st.write("Escolha uma ferramenta no menu lateral para começar.")
