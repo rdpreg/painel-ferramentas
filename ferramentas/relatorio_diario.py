@@ -1,16 +1,14 @@
 import streamlit as st
 import pandas as pd
-import dataframe_image as dfi
 from datetime import datetime
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
 from email.mime.application import MIMEApplication
 import tempfile
 
 def executar():
-    st.title("Relatório Diário de AuC por Assessor")
+    st.title("📊 Relatório Diário de AuC por Assessor")
 
     uploaded_file = st.file_uploader("Faça upload do Excel com os dados", type=["xlsx"])
 
@@ -48,27 +46,20 @@ def executar():
             else:
                 return [''] * len(row)
 
-        styled = relatorio_com_total.style.apply(destaque_total, axis=1).hide(axis='index')
-        st.dataframe(styled_df, use_container_width=True)
+        # 6. Exibir tabela estilizada no app
+        st.markdown("### Consolidado por Assessor")
+        st.dataframe(
+            relatorio_com_total.style.apply(destaque_total, axis=1),
+            use_container_width=True
+        )
 
-        # 6. Salvar temporariamente a imagem e a planilha
+        # 7. Salvar planilha temporária
         data_hoje = datetime.now().strftime('%d-%m-%Y')
-
-        #with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as img_file:
-         #   dfi.export(styled, img_file.name)
-          #  imagem_path = img_file.name
-
         with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as excel_file:
             df.to_excel(excel_file.name, index=False)
             planilha_path = excel_file.name
 
-        # 7. Exibir imagem no app
-        st.image(imagem_path, caption="Relatório Gerado", use_column_width=True)
-
-        # 8. Botões de download
-        with open(imagem_path, "rb") as img_bytes:
-            st.download_button("📥 Baixar Imagem", img_bytes, file_name=f"relatorio_auc_{data_hoje}.png")
-
+        # 8. Botão para download da planilha original
         with open(planilha_path, "rb") as excel_bytes:
             st.download_button("📥 Baixar Planilha Original", excel_bytes, file_name="planilha_original.xlsx")
 
@@ -81,16 +72,10 @@ def executar():
         msg['To'] = ", ".join(destinatarios)
 
         corpo_html = f"""
-        <h3>Segue abaixo o consolidado diário de AuC por assessor:</h3>
+        <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
         <p>Data: {data_hoje}</p>
-        <img src="cid:relatorio_img">
         """
         msg.attach(MIMEText(corpo_html, 'html'))
-
-        with open(imagem_path, 'rb') as img:
-            img_mime = MIMEImage(img.read())
-            img_mime.add_header('Content-ID', '<relatorio_img>')
-            msg.attach(img_mime)
 
         with open(planilha_path, 'rb') as f:
             part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
