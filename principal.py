@@ -1,18 +1,20 @@
 import streamlit as st
 
-# Inicializa o menu ativo se não existir
+# Inicializa o menu padrão
 if "menu" not in st.session_state:
-    st.session_state.menu = "Relatório diário de PL"
+    st.session_state.menu = "home"
 
-# Botões de menu
+st.sidebar.title("Menu")
+
 if st.sidebar.button("Relatório diário de PL"):
-    st.session_state.menu = "Relatório diário de PL"
+    st.session_state.menu = "relatorio"
 
 if st.sidebar.button("Ferramenta 2"):
-    st.session_state.menu = "Ferramenta 2"
+    st.session_state.menu = "ferramenta2"
 
 if st.sidebar.button("Ferramenta 3"):
-    st.session_state.menu = "Ferramenta 3"
+    st.session_state.menu = "ferramenta3"
+
 
 # Conteúdo da página principal
 st.title("Bem-vindo(a) a área de relatórios")
