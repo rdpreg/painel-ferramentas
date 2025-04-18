@@ -1,4 +1,5 @@
 import streamlit as st
+from ferramentas import relatorio_diario
 
 # Inicializa o menu padrão
 if "menu" not in st.session_state:
@@ -6,7 +7,7 @@ if "menu" not in st.session_state:
 
 st.sidebar.title("Menu")
 
-if st.sidebar.button("Relatório diário de PL"):
+if st.sidebar.button("Relatório diário de AuC"):
     st.session_state.menu = "relatorio"
 
 if st.sidebar.button("Ferramenta 2"):
