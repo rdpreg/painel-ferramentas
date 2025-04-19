@@ -21,8 +21,7 @@ if st.session_state.menu == "relatorio":
     relatorio_diario.executar()
 
 elif st.session_state.menu == "vencimentos":
-    st.title("Ferramenta 2")
-    # conteúdo da ferramenta
+    aviso_rf.executar()
 
 elif st.session_state.menu == "ferramenta3":
     st.title("Ferramenta 3")
