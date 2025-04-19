@@ -2,7 +2,7 @@ streamlit>=1.32.0
 streamlit-authenticator>=0.2.3
 bcrypt>=4.0.1
 PyYAML>=6.0
-pandas
+pandas>=1.4.0
 openpyxl
 dataframe_image
 kaleido
