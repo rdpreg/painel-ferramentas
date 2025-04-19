@@ -35,8 +35,8 @@ def executar():
         relatorio_com_total = pd.concat([relatorio, linha_total], ignore_index=True)
 
         # 3.1 Calcular % AuC
-    relatorio_com_total["% AuC"] = relatorio_com_total["PL Total"] / total_geral
-    relatorio_com_total["% AuC"] = relatorio_com_total["% AuC"].apply(lambda x: f"{x:.2%}")
+        relatorio_com_total["% AuC"] = relatorio_com_total["PL Total"] / total_geral
+        relatorio_com_total["% AuC"] = relatorio_com_total["% AuC"].apply(lambda x: f"{x:.2%}")
 
         # 4. Formatar como moeda
         relatorio_com_total["PL Total"] = relatorio_com_total["PL Total"].apply(
