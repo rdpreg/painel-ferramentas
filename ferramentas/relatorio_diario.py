@@ -80,8 +80,27 @@ def executar():
         msg['To'] = ", ".join(destinatarios)
 
         # 10. Converter a tabela para HTML
-        html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
-        #html_tabela = relatorio_com_total.to_html(index=False, border=1)
+        #html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
+       
+        def gerar_tabela_html(df):
+            html = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse: collapse;">'
+            html += "<thead><tr>"
+            for coluna in df.columns:
+                html += f"<th>{coluna}</th>"
+            html += "</tr></thead><tbody>"
+
+            for idx, row in df.iterrows():
+                estilo = ' style="font-weight: bold; background-color: #f0f0f0;"' if row["Assessor"] == "TOTAL" else ""
+                html += f"<tr{estilo}>"
+                for valor in row:
+                    html += f"<td>{valor}</td>"
+                html += "</tr>"
+            html += "</tbody></table>"
+            return html
+            
+            html_tabela = gerar_tabela_html(relatorio_com_total)
+
+
 
         corpo_html = f"""\
         <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
