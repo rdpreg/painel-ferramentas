@@ -75,6 +75,7 @@ def executar():
         <p>Data: {data_hoje}</p>
         {html_tabela}
         """
+        msg.attach(MIMEText(corpo_html, 'html'))
 
 
         # 9. Envio de e-mail
@@ -97,7 +98,7 @@ def executar():
 
 
         
-        msg.attach(MIMEText(corpo_html, 'html'))
+        #msg.attach(MIMEText(corpo_html, 'html'))
 
         with open(planilha_path, 'rb') as f:
             part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
