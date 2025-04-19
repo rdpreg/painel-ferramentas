@@ -42,8 +42,8 @@ def executar():
         st.success(f"✅ {len(df_semana)} ativos com vencimento nesta semana foram identificados.")
 
         if st.button("📧 Enviar e-mails aos assessores"):
-            email_remetente = st.secrets["EMAIL_REMETENTE"]
-            senha_app = st.secrets["SENHA_APP"]
+            email_remetente = st.secrets["email"]["remetente"]
+            senha_app = st.secrets["email"]["senha_app"]
 
             enviados = 0
             for assessor, grupo in df_semana.groupby("Assessor"):
