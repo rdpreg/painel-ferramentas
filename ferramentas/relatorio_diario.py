@@ -62,14 +62,11 @@ def executar():
         data_hoje = datetime.now().strftime('%d-%m-%Y')
         
         # Criar o nome do arquivo final para o anexo
-        nome_arquivo_excel = f"Base BTG - {data_hoje}.xlsx"
+        #nome_arquivo_excel = f"Base BTG - {data_hoje}.xlsx"
         with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as excel_file:
             df.to_excel(excel_file.name, index=False)
             planilha_path = excel_file.name
 
-        # 8. Botão para download da planilha original
-        #with open(planilha_path, "rb") as excel_bytes:
-         #   st.download_button("📥 Baixar Planilha Original", excel_bytes, file_name="planilha_original.xlsx")
 
         # 9. Envio de e-mail
         destinatarios = [email.strip() for email in input_email.split(",")] if input_email else destinatarios_padrao
@@ -80,26 +77,7 @@ def executar():
         msg['To'] = ", ".join(destinatarios)
 
         # 10. Converter a tabela para HTML
-        #html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
-       
-        def gerar_tabela_html(df):
-            html = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse: collapse;">'
-            html += "<thead><tr>"
-            for coluna in df.columns:
-                html += f"<th>{coluna}</th>"
-            html += "</tr></thead><tbody>"
-
-            for idx, row in df.iterrows():
-                estilo = ' style="font-weight: bold; background-color: #f0f0f0;"' if row["Assessor"] == "TOTAL" else ""
-                html += f"<tr{estilo}>"
-                for valor in row:
-                    html += f"<td>{valor}</td>"
-                html += "</tr>"
-            html += "</tbody></table>"
-            return html
-            
-            html_tabela = gerar_tabela_html(relatorio_com_total)
-
+        html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
 
 
         corpo_html = f"""\
@@ -109,14 +87,14 @@ def executar():
         """
         msg.attach(MIMEText(corpo_html, 'html'))
 
-        #with open(planilha_path, 'rb') as f:
-         #   part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
-          #  part['Content-Disposition'] = 'attachment; filename="planilha_original.xlsx"'
-           # msg.attach(part)
         with open(planilha_path, 'rb') as f:
-            part = MIMEApplication(f.read(), Name=nome_arquivo_excel)
-            part['Content-Disposition'] = f'attachment; filename="{nome_arquivo_excel}"'
+            part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
+            part['Content-Disposition'] = 'attachment; filename="planilha_original.xlsx"'
             msg.attach(part)
+        #with open(planilha_path, 'rb') as f:
+         #   part = MIMEApplication(f.read(), Name=nome_arquivo_excel)
+          #  part['Content-Disposition'] = f'attachment; filename="{nome_arquivo_excel}"'
+           # msg.attach(part)
 
 
         try:
