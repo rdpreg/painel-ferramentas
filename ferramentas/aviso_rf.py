@@ -70,5 +70,5 @@ if vencimentos_file and btg_file:
 
             output = io.BytesIO()
             grupo.drop(columns=["Email Assessor"]).to_excel(output, index=False)
-            output.seek(
+            output.seek()
 
