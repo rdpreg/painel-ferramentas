@@ -72,8 +72,8 @@ def executar():
         msg['To'] = ", ".join(destinatarios)
 
         # 10. Converter a tabela para HTML
-        #html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
-        html_tabela = relatorio_com_total.to_html(index=False, border=1)
+        html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
+        #html_tabela = relatorio_com_total.to_html(index=False, border=1)
 
         corpo_html = f"""
         <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
