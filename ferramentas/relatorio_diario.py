@@ -75,9 +75,7 @@ def executar():
         <p>Data: {data_hoje}</p>
         {html_tabela}
         """
-        msg.attach(MIMEText(corpo_html, 'html'))
-
-
+    
         # 9. Envio de e-mail
         destinatarios = [email.strip() for email in input_email.split(",")] if input_email else destinatarios_padrao
 
@@ -85,6 +83,8 @@ def executar():
         msg['Subject'] = f"📊 Relatório Diário de AuC - {data_hoje}"
         msg['From'] = st.secrets["email"]["remetente"]
         msg['To'] = ", ".join(destinatarios)
+
+        msg.attach(MIMEText(corpo_html, 'html'))
 
         # 10. Converter a tabela para HTML
         #html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
