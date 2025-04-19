@@ -80,7 +80,7 @@ def executar():
 
         # 10. Converter a tabela para HTML
         html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
-        #html_tabela = relatorio_com_total.to_html(index=False, border=1)
+    
 
         corpo_html = f"""
         <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
@@ -89,9 +89,14 @@ def executar():
         """
         msg.attach(MIMEText(corpo_html, 'html'))
 
+        # Alterando o nome do arquivo em anexo
+        nome_arquivo_excel = f"Base_BTG_{data_hoje}.xlsx"
+
         with open(planilha_path, 'rb') as f:
-            part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
-            part['Content-Disposition'] = 'attachment; filename="planilha_original.xlsx"'
+            #part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
+            part = MIMEApplication(f.read(), Name=nome_arquivo_excel)
+            #part['Content-Disposition'] = 'attachment; filename="planilha_original.xlsx"'
+            part['Content-Disposition'] = f'attachment; filename="{nome_arquivo_excel}"'
             msg.attach(part)
 
         try:
