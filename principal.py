@@ -20,7 +20,7 @@ if st.sidebar.button("Ferramenta 3"):
 if st.session_state.menu == "relatorio":
     relatorio_diario.executar()
 
-elif st.session_state.menu == "ferramenta2":
+elif st.session_state.menu == "vencimentos":
     st.title("Ferramenta 2")
     # conteúdo da ferramenta
 
