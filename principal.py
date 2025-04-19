@@ -10,8 +10,8 @@ st.sidebar.title("Menu")
 if st.sidebar.button("Relatório diário de AuC"):
     st.session_state.menu = "relatorio"
 
-if st.sidebar.button("Ferramenta 2"):
-    st.session_state.menu = "ferramenta2"
+if st.sidebar.button("Aviso de Vencimentos RF"):
+    st.session_state.menu = "vencimentos"
 
 if st.sidebar.button("Ferramenta 3"):
     st.session_state.menu = "ferramenta3"
