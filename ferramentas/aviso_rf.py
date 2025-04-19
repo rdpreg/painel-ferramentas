@@ -67,6 +67,7 @@ def executar():
                         "Valor Líquido": "R$ {:,.2f}",
                         "Vencimento": lambda x: x.strftime("%d/%m/%Y")
                     })
+                    .hide_index()
                     .to_html()
                 )
 
