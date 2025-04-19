@@ -70,7 +70,7 @@ def executar():
         # 8. Converter a tabela para HTML
         html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
 
-        corpo_html = f"""\
+        corpo_html = f"""
         <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
         <p>Data: {data_hoje}</p>
         {html_tabela}
