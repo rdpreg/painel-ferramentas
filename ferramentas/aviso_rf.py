@@ -62,12 +62,12 @@ def executar():
                 # 7. Gerar tabela HTML formatada
                 html_tabela = (
                     grupo.drop(columns=["Assessor", "Email Assessor"])
+                    .reset_index(drop=True)
                     .style
                     .format({
                         "Valor Líquido": "R$ {:,.2f}",
                         "Vencimento": lambda x: x.strftime("%d/%m/%Y")
                     })
-                    .hide_index()
                     .to_html()
                 )
 
