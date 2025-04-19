@@ -34,11 +34,6 @@ def executar():
         linha_total = pd.DataFrame([{"Assessor": "TOTAL", "PL Total": total_geral}])
         relatorio_com_total = pd.concat([relatorio, linha_total], ignore_index=True)
 
-        # 3.1 Calcular % AuC
-        relatorio_com_total["% AuC"] = relatorio_com_total["PL Total"] / total_geral
-        relatorio_com_total["% AuC"] = relatorio_com_total["% AuC"].apply(lambda x: f"{x:.2%}")
-
-
         # 4. Formatar como moeda
         relatorio_com_total["PL Total"] = relatorio_com_total["PL Total"].apply(
             lambda x: f"R$ {x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
@@ -60,22 +55,14 @@ def executar():
 
         # 7. Salvar planilha temporária
         data_hoje = datetime.now().strftime('%d-%m-%Y')
-        
-        # Criar o nome do arquivo final para o anexo
-        #nome_arquivo_excel = f"Base BTG - {data_hoje}.xlsx"
         with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as excel_file:
             df.to_excel(excel_file.name, index=False)
             planilha_path = excel_file.name
-        
-        # 8. Converter a tabela para HTML
-        html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
 
-        corpo_html = f"""
-        <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
-        <p>Data: {data_hoje}</p>
-        {html_tabela}
-        """
-    
+        # 8. Botão para download da planilha original
+        with open(planilha_path, "rb") as excel_bytes:
+            st.download_button("📥 Baixar Planilha Original", excel_bytes, file_name="planilha_original.xlsx")
+
         # 9. Envio de e-mail
         destinatarios = [email.strip() for email in input_email.split(",")] if input_email else destinatarios_padrao
 
@@ -84,21 +71,16 @@ def executar():
         msg['From'] = st.secrets["email"]["remetente"]
         msg['To'] = ", ".join(destinatarios)
 
-        msg.attach(MIMEText(corpo_html, 'html'))
-
         # 10. Converter a tabela para HTML
-        #html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
+        html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
+        #html_tabela = relatorio_com_total.to_html(index=False, border=1)
 
-
-        #corpo_html = f"""\
-        #<h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
-        #<p>Data: {data_hoje}</p>
-        #{html_tabela}
-        #"""
-
-
-        
-        #msg.attach(MIMEText(corpo_html, 'html'))
+        corpo_html = f"""
+        <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
+        <p>Data: {data_hoje}</p>
+        {html_tabela}
+        """
+        msg.attach(MIMEText(corpo_html, 'html'))
 
         with open(planilha_path, 'rb') as f:
             part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
