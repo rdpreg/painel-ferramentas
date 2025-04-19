@@ -71,11 +71,12 @@ def executar():
                 )
 
                 # 8. Montar corpo do e-mail
+                primeiro_nome = assessor.strip().split()[0].capitalize()
                 corpo_html = f"""
-                <p>Olá, {assessor}!</p>
+                <p>Olá, {primeiro_nome}!</p>
                 <p>Seguem abaixo os ativos de renda fixa dos seus clientes com vencimento nesta semana:</p>
                 {html_tabela}
-                <p>Abraços,<br>Equipe Convexa</p>
+                <p>Abraços,<br>Equipe Convexa Investimentos</p>
                 """
 
                 # 9. Criar anexo Excel em memória
