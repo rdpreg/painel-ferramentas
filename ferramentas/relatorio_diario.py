@@ -60,6 +60,9 @@ def executar():
 
         # 7. Salvar planilha temporária
         data_hoje = datetime.now().strftime('%d-%m-%Y')
+        
+        # Criar o nome do arquivo final para o anexo
+        nome_arquivo_excel = f"Base BTG - {data_hoje}.xlsx"
         with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as excel_file:
             df.to_excel(excel_file.name, index=False)
             planilha_path = excel_file.name
