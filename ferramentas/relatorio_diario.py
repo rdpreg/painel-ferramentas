@@ -90,10 +90,15 @@ def executar():
         """
         msg.attach(MIMEText(corpo_html, 'html'))
 
+        #with open(planilha_path, 'rb') as f:
+         #   part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
+          #  part['Content-Disposition'] = 'attachment; filename="planilha_original.xlsx"'
+           # msg.attach(part)
         with open(planilha_path, 'rb') as f:
-            part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
-            part['Content-Disposition'] = 'attachment; filename="planilha_original.xlsx"'
+            part = MIMEApplication(f.read(), Name=nome_arquivo_excel)
+            part['Content-Disposition'] = f'attachment; filename="{nome_arquivo_excel}"'
             msg.attach(part)
+
 
         try:
             with smtplib.SMTP("smtp.gmail.com", 587) as server:
