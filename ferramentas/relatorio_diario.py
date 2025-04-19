@@ -78,6 +78,7 @@ def executar():
         corpo_html = f"""
         <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
         <p>Data: {data_hoje}</p>
+        {html_tabela}
         """
         msg.attach(MIMEText(corpo_html, 'html'))
 
