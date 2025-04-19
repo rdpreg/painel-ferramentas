@@ -67,8 +67,8 @@ def executar():
             planilha_path = excel_file.name
 
         # 8. Botão para download da planilha original
-        #with open(planilha_path, "rb") as excel_bytes:
-        #    st.download_button("📥 Baixar Planilha Original", excel_bytes, file_name="planilha_original.xlsx")
+        with open(planilha_path, "rb") as excel_bytes:
+            st.download_button("📥 Baixar Planilha Original", excel_bytes, file_name="planilha_original.xlsx")
 
         # 9. Envio de e-mail
         destinatarios = [email.strip() for email in input_email.split(",")] if input_email else destinatarios_padrao
