@@ -25,6 +25,9 @@ def executar():
         # 1. Ler o arquivo
         df = pd.read_excel(uploaded_file)
 
+        #1.1 Padronizar os nomes dos assessores
+        df["Assessor"]=df["Assessor].str.title()
+
         # 2. Agrupar por assessor
         relatorio = df.groupby("Assessor")["PL Total"].sum().reset_index()
         relatorio = relatorio.sort_values(by="PL Total", ascending=False)
