@@ -83,7 +83,7 @@ def executar():
         html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
         #html_tabela = relatorio_com_total.to_html(index=False, border=1)
 
-        corpo_html = f"""
+        corpo_html = f"""\
         <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
         <p>Data: {data_hoje}</p>
         {html_tabela}
