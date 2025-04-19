@@ -66,6 +66,15 @@ def executar():
         with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as excel_file:
             df.to_excel(excel_file.name, index=False)
             planilha_path = excel_file.name
+        
+        # 8. Converter a tabela para HTML
+        html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
+
+        corpo_html = f"""\
+        <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
+        <p>Data: {data_hoje}</p>
+        {html_tabela}
+        """
 
 
         # 9. Envio de e-mail
@@ -77,25 +86,23 @@ def executar():
         msg['To'] = ", ".join(destinatarios)
 
         # 10. Converter a tabela para HTML
-        html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
+        #html_tabela = relatorio_com_total.style.apply(destaque_total, axis=1).to_html()
 
 
-        corpo_html = f"""\
-        <h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
-        <p>Data: {data_hoje}</p>
-        {html_tabela}
-        """
+        #corpo_html = f"""\
+        #<h3>Segue em anexo o consolidado diário de AuC por assessor.</h3>
+        #<p>Data: {data_hoje}</p>
+        #{html_tabela}
+        #"""
+
+
+        
         msg.attach(MIMEText(corpo_html, 'html'))
 
         with open(planilha_path, 'rb') as f:
             part = MIMEApplication(f.read(), Name="planilha_original.xlsx")
             part['Content-Disposition'] = 'attachment; filename="planilha_original.xlsx"'
             msg.attach(part)
-        #with open(planilha_path, 'rb') as f:
-         #   part = MIMEApplication(f.read(), Name=nome_arquivo_excel)
-          #  part['Content-Disposition'] = f'attachment; filename="{nome_arquivo_excel}"'
-           # msg.attach(part)
-
 
         try:
             with smtplib.SMTP("smtp.gmail.com", 587) as server:
