@@ -8,4 +8,5 @@ dataframe_image
 kaleido
 matplotlib
 bcrypt
+pytz
 
