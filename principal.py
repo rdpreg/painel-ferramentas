@@ -19,7 +19,7 @@ if st.sidebar.button("Relatório Diário NNM (D-1)"):
     st.session_state.menu = "nnm_diario"
 
 if st.sidebar.button("Aviso de Aniversariantes"):
-    #st.session_state.menu = "aniversariantes"
+    st.session_state.menu = "aniversariantes"
 
 # TELA PRINCIPAL
 if st.session_state.menu == "relatorio":
