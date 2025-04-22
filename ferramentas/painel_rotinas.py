@@ -54,7 +54,15 @@ def executar():
     tarefas_do_dia = st.session_state["rotinas"][dia_semana]
 
     def exibir_bloco(nome_bloco, tarefas):
-        st.subheader(f"🕒 {nome_bloco.capitalize()}")
+        # Descrição dos horários por período
+        horarios = {
+            "manhã": " (até 10:00)",
+            "tarde": " (até 17:00)",
+            "livre": " (qualquer horário)"
+        }
+        st.subheader(f"🕒 {nome_bloco.capitalize()}{horarios[nome_bloco]}")
+
+        #st.subheader(f"🕒 {nome_bloco.capitalize()}")
         for tarefa, info in tarefas.items():
             col1, col2 = st.columns([0.05, 0.95])
             with col1:
