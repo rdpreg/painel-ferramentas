@@ -8,7 +8,19 @@ def executar():
     # Hora atual com fuso de Brasília
     fuso_brasilia = pytz.timezone("America/Sao_Paulo")
     agora = datetime.now(fuso_brasilia)
-    dia_semana = agora.strftime("%A").lower()  # segunda, terça, etc
+    #dia_semana = agora.strftime("%A").lower()  # segunda, terça, etc
+    dias_em_portugues = {
+    "monday": "segunda",
+    "tuesday": "terça",
+    "wednesday": "quarta",
+    "thursday": "quinta",
+    "friday": "sexta",
+    "saturday": "sábado",
+    "sunday": "domingo"
+    }
+    dia_semana_en = agora.strftime("%A").lower()
+    dia_semana = dias_em_portugues[dia_semana_en]
+
     st.markdown(f"Data: **{agora.strftime('%d/%m/%Y')} ({dia_semana.capitalize()})**")
 
     # Tarefas fixas de segunda a sexta
