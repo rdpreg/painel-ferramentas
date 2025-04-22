@@ -25,7 +25,7 @@ if st.sidebar.button("Aviso de Aniversariantes"):
     st.session_state.menu = "aniversariantes"
 
 # TELA PRINCIPAL
-if st.session_state.menu == "painel_rotinas":
+if st.session_state.menu == "rotinas":
     painel_rotinas.executar()
 
 elif st.session_state.menu == "relatorio":
