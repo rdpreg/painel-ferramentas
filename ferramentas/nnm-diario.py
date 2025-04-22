@@ -1,0 +1,76 @@
+import streamlit as st
+import pandas as pd
+import datetime
+import io
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+# Função para formatar a tabela como HTML
+def formatar_tabela_html(df):
+    df_estilizado = df.style.format({"Captação (em Reais R$)": "R$ {:,.2f}"})
+    return df_estilizado.to_html(index=False)
+
+# Função para enviar o e-mail
+def enviar_email(assunto, corpo_html, anexo, nome_arquivo):
+    remetente = st.secrets["email"]["remetente"]
+    senha = st.secrets["email"]["senha_app"]
+    destinatarios = st.secrets["email"]["destinatarios"]
+
+    msg = MIMEMultipart()
+    msg['From'] = remetente
+    msg['To'] = ", ".join(destinatarios)
+    msg['Subject'] = assunto
+
+    msg.attach(MIMEText(corpo_html, 'html'))
+
+    # Anexo
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(anexo.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', f'attachment; filename="{nome_arquivo}"')
+    msg.attach(part)
+
+    # Enviar
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as servidor:
+        servidor.login(remetente, senha)
+        servidor.send_message(msg)
+
+# Título
+st.title("Envio Diário - Relatório NNM")
+
+# Upload
+arquivo = st.file_uploader("Faça o upload da planilha .xlsx", type="xlsx")
+
+if arquivo:
+    df = pd.read_excel(arquivo)
+
+    # Garantir que a coluna Data é datetime
+    df['Data'] = pd.to_datetime(df['Data'])
+
+    # Filtrar para o dia anterior
+    ontem = datetime.datetime.now() - datetime.timedelta(days=1)
+    df_filtrado = df[df['Data'].dt.date == ontem.date()]
+
+    st.subheader(f"Dados filtrados para: {ontem.strftime('%d/%m/%Y')}")
+    st.dataframe(df_filtrado)
+
+    if not df_filtrado.empty:
+        corpo_html = f"""
+        <p>Segue abaixo o relatório diário de NNM com os dados de {ontem.strftime('%d/%m/%Y')}:</p>
+        {formatar_tabela_html(df_filtrado)}
+        <p>Qualquer dúvida, fico à disposição.</p>
+        """
+
+        assunto = f"Relatório Diário de NNM – {ontem.strftime('%d/%m/%Y')}"
+
+        if st.button("Enviar relatório por e-mail"):
+            try:
+                enviar_email(assunto, corpo_html, arquivo, f"Relatorio_NNM_{ontem.strftime('%Y%m%d')}.xlsx")
+                st.success("E-mail enviado com sucesso!")
+            except Exception as e:
+                st.error(f"Erro ao enviar e-mail: {e}")
+    else:
+        st.warning("Nenhum dado encontrado para o dia anterior.")
