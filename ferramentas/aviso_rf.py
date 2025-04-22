@@ -59,6 +59,7 @@ def executar():
                     st.warning(f"Assessor {assessor} sem e-mail definido.")
                     continue
 
+                    enviados += 1
                 # ⬇️⬇️⬇️ AQUI entra o código do relatório consolidado ⬇️⬇️⬇️
     
                 df_envios = df_semana[["Assessor", "Valor Líquido"]].copy()
