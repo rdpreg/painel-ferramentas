@@ -5,48 +5,49 @@ import pytz
 def executar():
     st.title("📋 Painel de Rotinas Diárias")
 
-    # Hora atual com fuso de Brasília
+    # Converte dias para português
+    dias_em_portugues = {
+        "monday": "segunda",
+        "tuesday": "terça",
+        "wednesday": "quarta",
+        "thursday": "quinta",
+        "friday": "sexta",
+        "saturday": "sábado",
+        "sunday": "domingo"
+    }
+
+    # Hora atual e dia traduzido
     fuso_brasilia = pytz.timezone("America/Sao_Paulo")
     agora = datetime.now(fuso_brasilia)
-    #dia_semana = agora.strftime("%A").lower()  # segunda, terça, etc
-    dias_em_portugues = {
-    "monday": "segunda",
-    "tuesday": "terça",
-    "wednesday": "quarta",
-    "thursday": "quinta",
-    "friday": "sexta",
-    "saturday": "sábado",
-    "sunday": "domingo"
-    }
     dia_semana_en = agora.strftime("%A").lower()
     dia_semana = dias_em_portugues[dia_semana_en]
-
     st.markdown(f"Data: **{agora.strftime('%d/%m/%Y')} ({dia_semana.capitalize()})**")
 
-    # Tarefas fixas de segunda a sexta
-    dias_da_semana = ["segunda", "terça", "quarta", "quinta", "sexta"]
+    dias_uteis = ["segunda", "terça", "quarta", "quinta", "sexta"]
+
     tarefas_manha = {
         "Relatório Conta Corrente": {"feito": False, "hora": ""},
         "Relatório Base de Clientes": {"feito": False, "hora": ""},
         "Relatório Diário Geral": {"feito": False, "hora": ""},
         "Aviso de Aniversariantes": {"feito": False, "hora": ""}
     }
+
     tarefas_tarde = {
         "Relatório Diário de AuC": {"feito": False, "hora": ""}
     }
 
-    # Inicializa session_state com rotina da semana
+    # Inicializa a estrutura apenas se ainda não tiver
     if "rotinas" not in st.session_state:
         st.session_state["rotinas"] = {}
-        for dia in dias_da_semana:
+        for dia in dias_uteis:
             st.session_state["rotinas"][dia] = {
                 "manhã": tarefas_manha.copy(),
                 "tarde": tarefas_tarde.copy(),
                 "livre": {}
             }
 
-    # Se for fim de semana, mostrar mensagem
-    if dia_semana not in dias_da_semana:
+    # Se for sábado ou domingo
+    if dia_semana not in dias_uteis:
         st.warning("Hoje não há rotina definida (fim de semana).")
         return
 
