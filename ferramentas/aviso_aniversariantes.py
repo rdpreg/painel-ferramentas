@@ -20,14 +20,14 @@ def enviar_email(destinatario, assunto, corpo_html):
         server.login(email_remetente, senha_app)
         server.send_message(msg)
 
-# Função para extrair e formatar o primeiro nome do assessor
+# Formata apenas o primeiro nome com a primeira letra maiúscula
 def primeiro_nome_formatado(nome_completo):
     if pd.isna(nome_completo):
         return "Assessor"
     primeiro_nome = nome_completo.strip().split()[0]
     return primeiro_nome.capitalize()
 
-# Função para montar o corpo do e-mail individual por assessor
+# Monta corpo de e-mail individual por assessor
 def montar_corpo_email(df_assessor, data_formatada, nome_assessor):
     nome_formatado = primeiro_nome_formatado(nome_assessor)
 
@@ -53,10 +53,8 @@ def executar():
         else:
             df = pd.read_excel(arquivo)
 
-        # Converter a coluna 'Aniversário'
         df['Aniversário'] = pd.to_datetime(df['Aniversário'], format="%d/%m/%Y", errors='coerce')
 
-        # Filtrar aniversariantes do dia
         hoje = dt.datetime.today()
         df_hoje = df[(df['Aniversário'].dt.day == hoje.day) & (df['Aniversário'].dt.month == hoje.month)]
 
@@ -72,7 +70,7 @@ def executar():
             assessores = df_hoje['Assessor'].unique()
             total_aniversariantes = len(df_hoje)
 
-            # Envio por assessor (simulado para Rafael)
+            # Envio individual (todos simulados para Rafael)
             for assessor in assessores:
                 df_assessor = df_hoje[df_hoje['Assessor'] == assessor]
                 corpo_html = montar_corpo_email(df_assessor, data_formatada, assessor)
@@ -80,18 +78,18 @@ def executar():
                              f"Aniversariantes do dia {data_formatada} – {assessor}",
                              corpo_html)
 
-            # Relatório final consolidado
-            tabela_html = df_hoje[['Nome', 'Conta', 'Assessor']].sort_values(by='Assessor').to_html(index=False)
-
+            # Relatório final agrupado por assessor
             corpo_relatorio = f"""
-            <p>📊 <strong>Relatório Consolidado – Aniversariantes {data_formatada}</strong></p>
-            <ul>
-                <li><strong>Total de aniversariantes:</strong> {total_aniversariantes}</li>
-                <li><strong>Total de assessores envolvidos:</strong> {len(assessores)}</li>
-            </ul>
-            <p><strong>Lista completa:</strong></p>
-            {tabela_html}
+            <p>Olá Rafael,</p>
+            <p>Segue abaixo o relatório completo de aniversariantes do dia {data_formatada}, agrupados por assessor:</p>
             """
+
+            for assessor in sorted(assessores):
+                df_assessor = df_hoje[df_hoje["Assessor"] == assessor]
+                corpo_relatorio += f"<strong>{assessor}</strong><br>"
+                for _, row in df_assessor.iterrows():
+                    corpo_relatorio += f"- {row['Nome']} (Conta: {row['Conta']})<br>"
+                corpo_relatorio += "<br>"
 
             enviar_email("rafael@convexainvestimentos.com",
                          f"📊 Relatório Consolidado – Aniversariantes {data_formatada}",
