@@ -37,7 +37,7 @@ elif st.session_state.menu == "nnm_diario":
 #elif st.session_state.menu == "aniversariantes":
     #aniversariantes.executar()
 
-elif menu == "Painel de Rotinas":
+elif st.session_state.menu == "paine_rotinas":
     painel_rotinas.executar()
 
 
