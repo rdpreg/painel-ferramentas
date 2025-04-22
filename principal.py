@@ -18,6 +18,9 @@ if st.sidebar.button("Aviso de Vencimentos RF"):
 if st.sidebar.button("Relatório Diário NNM (D-1)"):
     st.session_state.menu = "nnm_diario"
 
+if st.sidebar.button("Aviso de Aniversariantes"):
+    #st.session_state.menu = "aniversariantes"
+
 # TELA PRINCIPAL
 if st.session_state.menu == "relatorio":
     relatorio_diario.executar()
@@ -27,6 +30,9 @@ elif st.session_state.menu == "vencimentos":
 
 elif st.session_state.menu == "nnm_diario":
     nnm_diario.executar()
+
+elif st.session_state.menu == "aniversariantes":
+    #aniversariantes.executar()
 
 else:
     st.title("Bem-vindo(a) à área de relatórios")
