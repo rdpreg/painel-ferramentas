@@ -9,6 +9,9 @@ if "menu" not in st.session_state:
 
 st.sidebar.title("Menu")
 
+if st.sidebar.button("Painel de Rotinas"):
+    st.session_state.menu = "rotinas"
+
 if st.sidebar.button("Relatório diário de AuC"):
     st.session_state.menu = "relatorio"
 
@@ -33,6 +36,10 @@ elif st.session_state.menu == "nnm_diario":
 
 #elif st.session_state.menu == "aniversariantes":
     #aniversariantes.executar()
+
+elif menu == "Painel de Rotinas":
+    painel_rotinas.executar()
+
 
 else:
     st.title("Bem-vindo(a) à área de relatórios")
