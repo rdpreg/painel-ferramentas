@@ -14,8 +14,8 @@ if st.sidebar.button("Relatório diário de AuC"):
 if st.sidebar.button("Aviso de Vencimentos RF"):
     st.session_state.menu = "vencimentos"
 
-if st.sidebar.button("Ferramenta 3"):
-    st.session_state.menu = "ferramenta3"
+if st.sidebar.button("Relatório Diário NNM (D-1)"):
+    st.session_state.menu = "nnm-diario"
 
 # TELA PRINCIPAL
 if st.session_state.menu == "relatorio":
@@ -26,7 +26,7 @@ elif st.session_state.menu == "vencimentos":
 
 elif st.session_state.menu == "ferramenta3":
     st.title("Ferramenta 3")
-    # conteúdo da ferramenta
+    nnm-diario.executar()
 
 else:
     st.title("Bem-vindo(a) à área de relatórios")
