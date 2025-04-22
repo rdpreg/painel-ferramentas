@@ -65,20 +65,25 @@ def executar():
         st.success(f"{len(df_hoje)} aniversariante(s) encontrado(s) para hoje!")
         st.dataframe(df_hoje)
 
-        if st.button("📧 Enviar e-mails de teste para Rafael"):
+        if st.button("📧 Enviar e-mails para assessores"):
             data_formatada = hoje.strftime("%d/%m/%Y")
             assessores = df_hoje['Assessor'].unique()
             total_aniversariantes = len(df_hoje)
 
-            # Envio individual (todos simulados para Rafael)
+            # Envio real para cada assessor
             for assessor in assessores:
                 df_assessor = df_hoje[df_hoje['Assessor'] == assessor]
                 corpo_html = montar_corpo_email(df_assessor, data_formatada, assessor)
-                enviar_email("rafael@convexainvestimentos.com",
-                             f"Aniversariantes do dia {data_formatada} – {assessor}",
-                             corpo_html)
 
-            # Relatório final agrupado por assessor
+                email_destino = st.secrets["emails_assessores"].get(assessor)
+                if email_destino:
+                    enviar_email(email_destino,
+                                 f"🎉 Aniversariantes do dia {data_formatada}",
+                                 corpo_html)
+                else:
+                    st.warning(f"❗ E-mail não encontrado para o assessor: {assessor}")
+
+            # Relatório final agrupado para Rafael
             corpo_relatorio = f"""
             <p>Olá Rafael,</p>
             <p>Segue abaixo o relatório completo de aniversariantes do dia {data_formatada}, agrupados por assessor:</p>
@@ -95,4 +100,4 @@ def executar():
                          f"📊 Relatório Consolidado – Aniversariantes {data_formatada}",
                          corpo_relatorio)
 
-            st.success(f"✅ E-mails individuais + relatório consolidado enviados para Rafael!")
+            st.success("✅ E-mails enviados com sucesso para os assessores + relatório final para Rafael!")
