@@ -10,8 +10,7 @@ from email import encoders
 
 def formatar_tabela_html(df):
     df_estilizado = df.style.format({
-        "Captação": "R$ {:,.2f}",
-        "Data": lambda x: x.strftime("%d/%m/%Y")
+        "Captação": "R$ {:,.2f}"
     })
     return df_estilizado.to_html(index=False)
 
