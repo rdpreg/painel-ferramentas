@@ -7,10 +7,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import locale
+
+# Define locale para formatar como R$ 1.234,56
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def formatar_tabela_html(df):
     df_estilizado = df.style.format({
-        "Captação": "R$ {:,.2f}"
+        "Captação": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
     })
     return df_estilizado.to_html(index=False)
 
