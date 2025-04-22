@@ -31,7 +31,7 @@ elif st.session_state.menu == "vencimentos":
 elif st.session_state.menu == "nnm_diario":
     nnm_diario.executar()
 
-elif st.session_state.menu == "aniversariantes":
+#elif st.session_state.menu == "aniversariantes":
     #aniversariantes.executar()
 
 else:
