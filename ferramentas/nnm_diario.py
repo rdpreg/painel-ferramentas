@@ -9,14 +9,16 @@ from email.mime.base import MIMEBase
 from email import encoders
 
 def formatar_tabela_html(df):
-    df_estilizado = df.style.format({"Captação (em Reais R$)": "R$ {:,.2f}"})
+    df_estilizado = df.style.format({
+        "Captação": "R$ {:,.2f}",
+        "Data": lambda x: x.strftime("%d/%m/%Y")
+    })
     return df_estilizado.to_html(index=False)
 
 def enviar_email(assunto, corpo_html, anexo, nome_arquivo):
     remetente = st.secrets["email"]["remetente"]
     senha = st.secrets["email"]["senha_app"]
     destinatarios = ["rafael@convexainvestimentos.com"]  # Envio apenas para teste
-    #destinatarios = st.secrets["email"]["destinatarios"]
 
     msg = MIMEMultipart()
     msg['From'] = remetente
@@ -46,6 +48,10 @@ def executar():
 
         ontem = datetime.datetime.now() - datetime.timedelta(days=1)
         df_filtrado = df[df['Data'].dt.date == ontem.date()]
+
+        colunas_desejadas = ["Cliente", "Nome", "Descrição", "Captação", "Data", "Assessor"]
+        df_filtrado = df_filtrado[colunas_desejadas].copy()
+        df_filtrado['Data'] = df_filtrado['Data'].dt.strftime("%d/%m/%Y")
 
         st.subheader(f"Dados filtrados para: {ontem.strftime('%d/%m/%Y')}")
         st.dataframe(df_filtrado)
