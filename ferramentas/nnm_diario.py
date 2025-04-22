@@ -22,7 +22,7 @@ def formatar_tabela_html(df):
 def enviar_email(assunto, corpo_html, anexo, nome_arquivo):
     remetente = st.secrets["email"]["remetente"]
     senha = st.secrets["email"]["senha_app"]
-    destinatarios = st.secrets["email"]["destinatarios"]
+    destinatarios = ["rafael@convexainvestimentos.com"]  # Envio apenas para teste
 
     msg = MIMEMultipart()
     msg['From'] = remetente
@@ -63,8 +63,10 @@ def executar():
         st.dataframe(df_display)
 
         if not df_filtrado.empty:
+            total_captado = df_filtrado["Captação"].sum()
+            valor_formatado = f"R$ {total_captado:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
             corpo_html = f"""
-            <p>Segue abaixo o relatório diário de NNM com os dados de {ontem.strftime('%d/%m/%Y')}:</p>
+            <p>Segue abaixo o relatório diário de NNM com os dados de {ontem.strftime('%d/%m/%Y')}, o saldo total captado foi de <strong>{valor_formatado}</strong>:</p>
             {formatar_tabela_html(df_filtrado)}
             <p>Qualquer dúvida, fico à disposição.</p>
             """
