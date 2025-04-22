@@ -1,7 +1,7 @@
 import streamlit as st
 from ferramentas import relatorio_diario
 from ferramentas import aviso_rf
-from ferramentas import nnm-diario
+from ferramentas import nnm_diario
 
 # Inicializa o menu padrão
 if "menu" not in st.session_state:
@@ -16,7 +16,7 @@ if st.sidebar.button("Aviso de Vencimentos RF"):
     st.session_state.menu = "vencimentos"
 
 if st.sidebar.button("Relatório Diário NNM (D-1)"):
-    st.session_state.menu = "nnm-diario"
+    st.session_state.menu = "nnm_diario"
 
 # TELA PRINCIPAL
 if st.session_state.menu == "relatorio":
@@ -25,8 +25,8 @@ if st.session_state.menu == "relatorio":
 elif st.session_state.menu == "vencimentos":
     aviso_rf.executar()
 
-elif st.session_state.menu == "nnm-diario":
-    nnm-diario.executar()
+elif st.session_state.menu == "nnm_diario":
+    nnm_diario.executar()
 
 else:
     st.title("Bem-vindo(a) à área de relatórios")
