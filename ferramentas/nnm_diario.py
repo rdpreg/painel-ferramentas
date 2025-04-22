@@ -15,7 +15,8 @@ def formatar_tabela_html(df):
 def enviar_email(assunto, corpo_html, anexo, nome_arquivo):
     remetente = st.secrets["email"]["remetente"]
     senha = st.secrets["email"]["senha_app"]
-    destinatarios = st.secrets["email"]["destinatarios"]
+    destinatarios = ["rafael@convexainvestimentos.com"]  # Envio apenas para teste
+    #destinatarios = st.secrets["email"]["destinatarios"]
 
     msg = MIMEMultipart()
     msg['From'] = remetente
