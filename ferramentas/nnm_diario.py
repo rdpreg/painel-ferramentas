@@ -49,7 +49,7 @@ def executar():
         ontem = datetime.datetime.now() - datetime.timedelta(days=1)
         df_filtrado = df[df['Data'].dt.date == ontem.date()]
 
-        colunas_desejadas = ["Cliente", "Nome", "Descrição", "Captação", "Data", "Assessor"]
+        colunas_desejadas = ["Conta", "Nome", "Descrição", "Captação", "Data", "Assessor"]
         df_filtrado = df_filtrado[colunas_desejadas].copy()
         df_filtrado['Data'] = df_filtrado['Data'].dt.strftime("%d/%m/%Y")
 
