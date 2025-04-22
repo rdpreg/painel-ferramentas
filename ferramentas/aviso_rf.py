@@ -111,7 +111,7 @@ def executar():
             ])
 
             corpo_resumo = f"""
-            <p><strong>Relatório Consolidado – Vencimentos da Semana</strong></p>
+            <p><strong>Vencimentos RF da Semana - Relatório Consolidado</strong></p>
             <p>💰 <strong>Valor total a vencer:</strong> R$ {valor_total:,.2f}<br>
             👤 <strong>Assessores notificados:</strong> {quantidade_assessores}<br>
             📧 <strong>E-mails enviados com sucesso:</strong> {enviados}</p>
