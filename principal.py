@@ -1,7 +1,7 @@
 import streamlit as st
 from ferramentas import relatorio_diario
 from ferramentas import aviso_rf
-from ferramentas import nnm_diario, painel_rotinas
+from ferramentas import nnm_diario, painel_rotinas, aviso_aniversariantes
 
 # Inicializa o menu padrão
 if "menu" not in st.session_state:
@@ -37,8 +37,8 @@ elif st.session_state.menu == "vencimentos":
 elif st.session_state.menu == "nnm_diario":
     nnm_diario.executar()
 
-#elif st.session_state.menu == "aniversariantes":
-    #aniversariantes.executar()
+elif st.session_state.menu == "aniversariantes":
+    aniversariantes.executar()
 
 
 else:
