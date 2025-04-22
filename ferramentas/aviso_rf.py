@@ -59,6 +59,47 @@ def executar():
                     st.warning(f"Assessor {assessor} sem e-mail definido.")
                     continue
 
+                # ⬇️⬇️⬇️ AQUI entra o código do relatório consolidado ⬇️⬇️⬇️
+    
+                df_envios = df_semana[["Assessor", "Valor Líquido"]].copy()
+                df_envios = df_envios.dropna(subset=["Valor Líquido"])
+                df_envios["Valor Líquido"] = pd.to_numeric(df_envios["Valor Líquido"], errors="coerce")
+
+                df_resumo = df_envios.groupby("Assessor").sum().sort_values("Valor Líquido", ascending=False)
+                valor_total = df_envios["Valor Líquido"].sum()
+                quantidade_assessores = df_resumo.shape[0]
+
+                linhas_html = "".join([
+                    f"<li>{assessor}: R$ {valor:,.2f}</li>"
+                    for assessor, valor in df_resumo["Valor Líquido"].items()
+                ])
+
+                corpo_resumo = f"""
+                <p><strong>Relatório Consolidado – Vencimentos da Semana</strong></p>
+                <p>💰 <strong>Valor total a vencer:</strong> R$ {valor_total:,.2f}<br>
+                👤 <strong>Assessores notificados:</strong> {quantidade_assessores}</p>
+                <p><strong>🧮 Valores por assessor:</strong></p>
+                <ul>{linhas_html}</ul>
+                <p>Abraços,<br>Ferramenta Automatizada</p>
+                """
+
+                msg_resumo = MIMEMultipart()
+                msg_resumo["From"] = email_remetente
+                msg_resumo["To"] = "rafael@convexainvestimentos.com"
+                msg_resumo["Subject"] = "📊 Relatório Consolidado – Vencimentos da Semana"
+                msg_resumo.attach(MIMEText(corpo_resumo, "html"))
+
+                try:
+                    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
+                        smtp.starttls()
+                        smtp.login(email_remetente, senha_app)
+                        smtp.send_message(msg_resumo)
+                    st.info("📨 Relatório consolidado enviado para rafael@convexainvestimentos.com.")
+                except Exception as e:
+                    st.error(f"Erro ao enviar o relatório consolidado: {e}")
+
+                # xxx AQUI encerra o código do relatório consolidado xxxx 
+
                 # 7. Gerar tabela HTML formatada
                 html_tabela = (
                     grupo.drop(columns=["Assessor", "Email Assessor"])
