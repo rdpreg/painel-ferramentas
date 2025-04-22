@@ -24,8 +24,7 @@ if st.session_state.menu == "relatorio":
 elif st.session_state.menu == "vencimentos":
     aviso_rf.executar()
 
-elif st.session_state.menu == "ferramenta3":
-    st.title("Ferramenta 3")
+elif st.session_state.menu == "nnm-diario":
     nnm-diario.executar()
 
 else:
