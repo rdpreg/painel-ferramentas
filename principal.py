@@ -38,7 +38,7 @@ elif st.session_state.menu == "nnm_diario":
     nnm_diario.executar()
 
 elif st.session_state.menu == "aniversariantes":
-    aniversariantes.executar()
+    aviso_aniversariantes.executar()
 
 
 else:
