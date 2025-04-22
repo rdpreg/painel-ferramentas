@@ -8,6 +8,9 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
+def executar():
+    st.title("Relatório Diário de NNM (D-1)")
+
 # Função para formatar a tabela como HTML
 def formatar_tabela_html(df):
     df_estilizado = df.style.format({"Captação (em Reais R$)": "R$ {:,.2f}"})
