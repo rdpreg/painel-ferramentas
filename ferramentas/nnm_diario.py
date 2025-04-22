@@ -27,7 +27,7 @@ def enviar_email(assunto, corpo_html, anexo, nome_arquivo):
     part = MIMEBase('application', 'octet-stream')
     part.set_payload(anexo.read())
     encoders.encode_base64(part)
-    part.add_header('Content-Disposition', f'attachment; filename="{nome_arquivo}")
+    part.add_header('Content-Disposition', f'attachment; filename="{nome_arquivo}"')
     msg.attach(part)
 
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as servidor:
