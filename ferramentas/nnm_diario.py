@@ -8,11 +8,15 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-# Função para formatar como R$ 1.234,56 (sem usar locale)
+# Função para formatar como R$ 1.234,56 (sem usar locale) e destacar captação negativa
 def formatar_tabela_html(df):
+    def destacar_negativos(val):
+        return ['background-color: #ffcccc; color: red' if v < 0 else '' for v in val]
+
     df_estilizado = df.style.format({
         "Captação": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
-    })
+    }).apply(destacar_negativos, subset=['Captação'], axis=1)
+
     return df_estilizado.to_html(index=False)
 
 def enviar_email(assunto, corpo_html, anexo, nome_arquivo):
@@ -54,7 +58,9 @@ def executar():
         df_filtrado['Data'] = pd.to_datetime(df_filtrado['Data']).dt.strftime("%d/%m/%Y")
 
         st.subheader(f"Dados filtrados para: {ontem.strftime('%d/%m/%Y')}")
-        st.dataframe(df_filtrado)
+        df_display = df_filtrado.copy()
+        df_display["Captação"] = df_display["Captação"].apply(lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."))
+        st.dataframe(df_display)
 
         if not df_filtrado.empty:
             corpo_html = f"""
