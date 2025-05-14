@@ -59,7 +59,7 @@ def executar():
                     primeiro_nome = "Giulia"
 
                 elif assessor_normalizado == "RAFAEL DADOORIAN PREGNOLATI":
-                    email_destino = "caio.carlos@convexainvestimentos.com"
+                    email_destino = "caiocarlos@convexainvestimentos.com"
                     primeiro_nome = "Caio"
 
                 if pd.isna(email_destino):
