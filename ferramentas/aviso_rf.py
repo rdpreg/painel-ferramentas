@@ -51,7 +51,7 @@ def executar():
                 email_destino = grupo["Email Assessor"].iloc[0]
                 primeiro_nome = assessor.strip().split()[0].capitalize()
 
-                # Redirecionamentos de e-mail + nome no corpo
+                # Redirecionamento de e-mails e nomes no corpo
                 assessor_normalizado = assessor.strip().upper()
 
                 if assessor_normalizado == "LEONARDO BARBOSA FRISONI":
@@ -66,23 +66,13 @@ def executar():
                     st.warning(f"Assessor {assessor} sem e-mail definido.")
                     continue
 
-                
-                
-                
-                #email_destino = grupo["Email Assessor"].iloc[0]
-                #if pd.isna(email_destino):
-                 #   st.warning(f"Assessor {assessor} sem e-mail definido.")
-                  #  continue
-
-                #primeiro_nome = assessor.strip().split()[0].capitalize()
-
                 html_tabela = (
                     grupo.drop(columns=["Assessor", "Email Assessor"])
                     .reset_index(drop=True)
                     .style
                     .format({
                         "Valor Líquido": "R$ {:,.2f}",
-                        "Vencimento": lambda x: x.strftime("%d/%m/%Y")
+                        "Data Vencimento": lambda x: x.strftime("%d/%m/%Y")
                     })
                     .to_html()
                 )
@@ -117,7 +107,7 @@ def executar():
                 except Exception as e:
                     st.error(f"Erro ao enviar para {assessor}: {e}")
 
-            # Enviar relatório consolidado para Rafael
+            # Envio do relatório consolidado para Rafael
             df_envios = df_semana[["Assessor", "Valor Líquido"]].copy()
             df_envios = df_envios.dropna(subset=["Valor Líquido"])
             df_envios["Valor Líquido"] = pd.to_numeric(df_envios["Valor Líquido"], errors="coerce")
@@ -132,7 +122,7 @@ def executar():
             ])
 
             corpo_resumo = f"""
-            <p><strong>Vencimentos RF da Semana - Relatório Consolidado</strong></p>
+            <p><strong>Relatório Consolidado – Vencimentos da Semana</strong></p>
             <p>💰 <strong>Valor total a vencer:</strong> R$ {valor_total:,.2f}<br>
             👤 <strong>Assessores notificados:</strong> {quantidade_assessores}<br>
             📧 <strong>E-mails enviados com sucesso:</strong> {enviados}</p>
