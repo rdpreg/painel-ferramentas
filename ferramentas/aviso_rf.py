@@ -49,11 +49,32 @@ def executar():
 
             for assessor, grupo in df_semana.groupby("Assessor"):
                 email_destino = grupo["Email Assessor"].iloc[0]
+                primeiro_nome = assessor.strip().split()[0].capitalize()
+
+                # Redirecionamentos de e-mail + nome no corpo
+                assessor_normalizado = assessor.strip().upper()
+
+                if assessor_normalizado == "LEONARDO BARBOSA FRISONI":
+                    email_destino = "giulia.mourao@convexainvestimentos.com"
+                    primeiro_nome = "Giulia"
+
+                elif assessor_normalizado == "RAFAEL DADOORIAN PREGNOLATI":
+                    email_destino = "caio.carlos@convexainvestimentos.com"
+                    primeiro_nome = "Caio"
+
                 if pd.isna(email_destino):
                     st.warning(f"Assessor {assessor} sem e-mail definido.")
                     continue
 
-                primeiro_nome = assessor.strip().split()[0].capitalize()
+                
+                
+                
+                #email_destino = grupo["Email Assessor"].iloc[0]
+                #if pd.isna(email_destino):
+                 #   st.warning(f"Assessor {assessor} sem e-mail definido.")
+                  #  continue
+
+                #primeiro_nome = assessor.strip().split()[0].capitalize()
 
                 html_tabela = (
                     grupo.drop(columns=["Assessor", "Email Assessor"])
