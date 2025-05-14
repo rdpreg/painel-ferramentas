@@ -5,6 +5,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
+from email.utils import formataddr
 import io
 
 def executar():
@@ -89,7 +90,7 @@ def executar():
                 output.seek(0)
 
                 msg = MIMEMultipart()
-                msg["From"] = email_remetente
+                msg["From"] = formataddr(("Backoffice Convexa", email_remetente))
                 msg["To"] = email_destino
                 msg["Subject"] = "📩 Atenção Assessor: Ativos de Renda Fixa a vencer nesta semana"
                 msg.attach(MIMEText(corpo_html, "html"))
