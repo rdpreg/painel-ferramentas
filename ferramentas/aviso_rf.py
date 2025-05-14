@@ -14,7 +14,7 @@ def executar():
     btg_file = st.file_uploader("2. Base BTG (conta + assessor)", type=["xlsx"])
 
     if vencimentos_file and btg_file:
-        df_venc = pd.read_excel(vencimentos_file, parse_dates=["Vencimento"])
+        df_venc = pd.read_excel(vencimentos_file, parse_dates=["Data Vencimento"])
         df_btg = pd.read_excel(btg_file)
         df_btg = df_btg.rename(columns={"Nome": "Nome Cliente"})
 
@@ -27,12 +27,12 @@ def executar():
         fim_semana = inicio_semana + timedelta(days=6)
 
         df_semana = df_merged[
-            (df_merged["Vencimento"] >= inicio_semana) &
-            (df_merged["Vencimento"] <= fim_semana)
+            (df_merged["Data Vencimento"] >= inicio_semana) &
+            (df_merged["Data Vencimento"] <= fim_semana)
         ]
 
         df_semana = df_semana[[
-            "Conta", "Nome", "Emissor", "Produto", "Vencimento",
+            "Conta", "Nome", "Emissor", "Produto", "Data Vencimento",
             "Valor Líquido - Curva Cliente", "Assessor", "Email Assessor"
         ]].rename(columns={
             "Nome": "Cliente",
