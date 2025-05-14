@@ -89,7 +89,7 @@ def executar():
                 output.seek(0)
 
                 msg = MIMEMultipart()
-                msg["From"] = email_remetente
+                msg["From"] = Backoffice Convexa
                 msg["To"] = email_destino
                 msg["Subject"] = "📩 Atenção Assessor: Ativos de Renda Fixa a vencer nesta semana"
                 msg.attach(MIMEText(corpo_html, "html"))
