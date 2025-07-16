@@ -43,6 +43,9 @@ elif st.session_state.menu == "nnm_diario":
 elif st.session_state.menu == "aniversariantes":
     aviso_aniversariantes.executar()
 
+elif st.session_state.menu == "relatorio_cc":
+    relatorio_cc.executar()
+
 
 else:
     st.title("Bem-vindo(a) à área de relatórios")
