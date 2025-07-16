@@ -27,6 +27,9 @@ if st.sidebar.button("Aviso de Aniversariantes"):
 if st.sidebar.button("Relatório de Conta-Corrente"):
     st.session_state.menu = "relatorio_cc"
 
+if st.sidebar.button("Check Base de Clientes"):
+    st.session_state.menu = "check_exclusao_base"
+
 # TELA PRINCIPAL
 if st.session_state.menu == "rotinas":
     painel_rotinas.executar()
@@ -45,6 +48,9 @@ elif st.session_state.menu == "aniversariantes":
 
 elif st.session_state.menu == "relatorio_cc":
     relatorio_cc.executar()
+
+elif st.session_state.menu == "check_exclusao_base":
+    check_exclusao_base.executar()
 
 
 else:
