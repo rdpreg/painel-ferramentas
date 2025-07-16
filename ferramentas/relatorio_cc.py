@@ -13,32 +13,29 @@ def executar():
 
     st.write("📂 Faça o upload dos arquivos necessários:")
     btg_file = st.file_uploader("1️⃣ Base BTG (conta + assessor)", type=["xlsx"])
-    transito_file = st.file_uploader("2️⃣ Valores em Trânsito (D+1, D+2, D+3)", type=["xlsx"])
-    saldo_file = st.file_uploader("3️⃣ Saldo Conta Corrente", type=["xlsx"])
+    saldo_file = st.file_uploader("2️⃣ Saldo D0 + Valores a Receber Projetados (RF + VT)", type=["xlsx"])
 
-    if btg_file and transito_file and saldo_file:
+    if btg_file and saldo_file:
         # Carregar bases
         df_btg = pd.read_excel(btg_file)
-        df_transito = pd.read_excel(transito_file)
         df_saldo = pd.read_excel(saldo_file)
 
         # Padronizar colunas
         df_btg = df_btg.rename(columns={"Conta": "Conta Cliente", "Nome": "Nome Cliente"})
-        df_transito = df_transito.rename(columns={"Conta": "Conta Cliente"})
         df_saldo = df_saldo.rename(columns={"Conta": "Conta Cliente", "Saldo": "Saldo CC"})
 
         # Mesclar dados
         df_merged = df_btg.merge(df_saldo, on="Conta Cliente", how="left")
-        df_merged = df_merged.merge(df_transito, on="Conta Cliente", how="left")
 
         # Preencher valores nulos com 0
         df_merged.fillna(0, inplace=True)
 
-        # Calcular coluna de saldo total por dia
+        # Calcular colunas de saldo total por dia
         df_merged["Saldo + D+1"] = df_merged["Saldo CC"] + df_merged["D+1"]
-        df_merged["Saldo + D+2"] = df_merged["Saldo CC"] + df_merged["D+1"] + df_merged["D+2"]
-        df_merged["Saldo + D+3"] = df_merged["Saldo CC"] + df_merged["D+1"] + df_merged["D+2"] + df_merged["D+3"]
+        df_merged["Saldo + D+2"] = df_merged["Saldo + D+1"] + df_merged["D+2"]
+        df_merged["Saldo + D+3"] = df_merged["Saldo + D+2"] + df_merged["D+3"]
 
+        # Mapear e-mails dos assessores
         emails_assessores = st.secrets["emails_assessores"]
         df_merged["Email Assessor"] = df_merged["Assessor"].map(emails_assessores)
 
