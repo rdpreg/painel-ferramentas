@@ -24,6 +24,9 @@ if st.sidebar.button("Relatório Diário NNM (D-1)"):
 if st.sidebar.button("Aviso de Aniversariantes"):
     st.session_state.menu = "aniversariantes"
 
+if st.sidebar.button("Relatório de Conta-Corrente"):
+    st.session_state.menu = "relatorio_cc"
+
 # TELA PRINCIPAL
 if st.session_state.menu == "rotinas":
     painel_rotinas.executar()
