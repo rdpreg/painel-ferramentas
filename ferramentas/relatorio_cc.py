@@ -8,7 +8,7 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 import io
 
-def fluxo_financeiro():
+def executar():
     st.title("💸 Envio de Fluxo Financeiro por Assessor")
 
     st.write("📂 Faça o upload dos arquivos necessários:")
