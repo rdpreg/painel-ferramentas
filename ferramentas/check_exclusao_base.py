@@ -5,7 +5,7 @@ def executar():
     st.title("📊 Avaliar Clientes Novos e Excluídos")
     st.write("Compare a Base BTG de ontem e hoje para identificar clientes novos e excluídos.")
 
-    coluna_chave = "Conta"  # ✅ Corrigido: usa a coluna "Conta"
+    coluna_chave = "Conta"  # ✅ Coluna usada para comparar
 
     # Upload dos arquivos
     arquivo_ontem = st.file_uploader("📂 Base BTG - Ontem", type=["csv", "xlsx"], key="ontem")
@@ -29,23 +29,39 @@ def executar():
                 st.error(f"❌ A coluna '{coluna_chave}' não foi encontrada nos arquivos.")
                 return
 
-            # Limpeza da coluna Conta
-            def limpar_coluna(df):
+            # Função de limpeza com os filtros fixos
+            def limpar_dataframe(df):
                 df = df.copy()
+
+                # Limpar coluna Conta
                 df[coluna_chave] = (
                     df[coluna_chave]
-                    .astype(str)  # transforma em string
-                    .str.strip()  # remove espaços
-                    .str.replace(".", "", regex=False)  # remove pontos
-                    .str.replace(",", "", regex=False)  # remove vírgulas
+                    .astype(str)
+                    .str.strip()
+                    .str.replace(".", "", regex=False)
+                    .str.replace(",", "", regex=False)
                 )
-                # Remove linhas com valores nulos ou filtros
+
+                # Aplicar filtros para excluir linhas
+                filtros_excluir = (
+                    (df["Posição"] == "Posição D-1") |
+                    (df["CARTEIRA"].isna()) |
+                    (df["CARTEIRA"].str.lower() == "(em branco)") |
+                    (df["tipo_conta"] == "Outros") |
+                    (df["cart_adm"] == "Outros") |
+                    (df["NR_CONTA"].isna()) |
+                    (df["TIPO_LANCAMENTO"].isin(["ED", "ET", "Liquidação Doador"]))
+                )
+                df = df[~filtros_excluir]
+
+                # Excluir linhas onde Conta está vazia
                 df = df[df[coluna_chave].notna()]
                 df = df[~df[coluna_chave].str.lower().str.contains("applied filter")]
+
                 return df
 
-            df_ontem = limpar_coluna(df_ontem)
-            df_hoje = limpar_coluna(df_hoje)
+            df_ontem = limpar_dataframe(df_ontem)
+            df_hoje = limpar_dataframe(df_hoje)
 
             # Mostrar prévia para validação
             st.subheader("🔍 Prévia da coluna analisada")
