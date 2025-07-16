@@ -87,7 +87,7 @@ def executar():
                 # Montar e-mail
                 msg = MIMEMultipart()
                 msg["From"] = formataddr(("Backoffice Convexa", email_remetente))
-                msg["To"] = email_destino
+                msg["To"] = "rafael@convexainvestimentos.com"
                 msg["Subject"] = "📩 Fluxo Financeiro – Clientes"
 
                 msg.attach(MIMEText(corpo_html, "html"))
