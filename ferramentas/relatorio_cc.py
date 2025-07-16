@@ -38,19 +38,19 @@ def executar():
             df_merged["D+3"]
         )
 
-        # 🔥 Filtrar clientes com Saldo Projetado > 0
+        # 🔥 Filtrar clientes com Saldo Projetado diferente de 0
         df_final = df_merged[
-            df_merged["Saldo Projetado"] > 0
+            df_merged["Saldo Projetado"] != 0
         ][[
             "Conta Cliente", "Nome Cliente", "Assessor",
             "Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"
         ]]
 
         # Mostrar dados processados
-        st.subheader("📊 Dados Processados (Saldo Projetado > 0)")
+        st.subheader("📊 Dados Processados")
         st.dataframe(df_final.round(2), use_container_width=True)
 
-        st.success(f"✅ {df_final.shape[0]} clientes com Saldo Projetado > 0 processados com sucesso.")
+        st.success(f"✅ {df_final.shape[0]} clientes com Saldo Projetado processados com sucesso.")
 
         if st.button("📧 Enviar e-mail de teste para Rafael"):
             email_remetente = st.secrets["email"]["remetente"]
