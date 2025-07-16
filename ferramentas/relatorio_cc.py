@@ -109,9 +109,9 @@ def executar():
                 <p>Aqui estão os dados de Saldo em Conta consolidados. O relatório detalhado está em anexo.</p>
                 <ul>
                     <li><strong>Saldo em Conta:</strong> {formatar_brasileiro(saldo_cc_total)}</li>
-                    <li><strong>Saldo em D+1:</strong> {formatar_brasileiro(saldo_d1_total)}</li>
-                    <li><strong>Saldo em D+2:</strong> {formatar_brasileiro(saldo_d2_total)}</li>
-                    <li><strong>Saldo em D+3:</strong> {formatar_brasileiro(saldo_d3_total)}</li>
+                    <li><strong>Saldo a entrar em D+1:</strong> {formatar_brasileiro(saldo_d1_total)}</li>
+                    <li><strong>Saldo a entrar em D+2:</strong> {formatar_brasileiro(saldo_d2_total)}</li>
+                    <li><strong>Saldo a entrar em D+3:</strong> {formatar_brasileiro(saldo_d3_total)}</li>
                 </ul>
                 <p>Abraços,<br>Equipe Convexa</p>
                 """
