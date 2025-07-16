@@ -8,6 +8,9 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 import io
 
+def formatar_brasileiro(valor):
+    return f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
+
 def executar():
     st.title("💸 Envio de Fluxo Financeiro (Modo Teste)")
 
@@ -38,7 +41,7 @@ def executar():
             df_merged["D+3"]
         )
 
-        # 🔥 Filtrar clientes com Saldo Projetado diferente de 0
+        # 🔥 Filtrar clientes com Saldo Projetado diferente de zero
         df_final = df_merged[
             df_merged["Saldo Projetado"] != 0
         ][[
@@ -46,28 +49,33 @@ def executar():
             "Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"
         ]]
 
-        # Mostrar dados processados
-        st.subheader("📊 Dados Processados")
-        st.dataframe(df_final.round(2), use_container_width=True)
+        # Formatar valores para BR
+        df_formatado = df_final.copy()
+        for col in ["Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"]:
+            df_formatado[col] = df_formatado[col].apply(formatar_brasileiro)
 
-        st.success(f"✅ {df_final.shape[0]} clientes com Saldo Projetado processados com sucesso.")
+        # Mostrar dados processados
+        st.subheader("📊 Dados Processados (Saldo Projetado ≠ 0)")
+        st.dataframe(df_formatado, use_container_width=True)
+
+        st.success(f"✅ {df_final.shape[0]} clientes com Saldo Projetado ≠ 0 processados com sucesso.")
 
         if st.button("📧 Enviar e-mail de teste para Rafael"):
             email_remetente = st.secrets["email"]["remetente"]
             senha_app = st.secrets["email"]["senha_app"]
 
             try:
-                # Gerar HTML com a tabela final
+                # Gerar HTML com a tabela final (formatada BR)
                 html_tabela = (
                     df_final
                     .reset_index(drop=True)
                     .style
                     .format({
-                        "Saldo CC": "R$ {:,.2f}",
-                        "D+1": "R$ {:,.2f}",
-                        "D+2": "R$ {:,.2f}",
-                        "D+3": "R$ {:,.2f}",
-                        "Saldo Projetado": "R$ {:,.2f}"
+                        "Saldo CC": lambda x: formatar_brasileiro(x),
+                        "D+1": lambda x: formatar_brasileiro(x),
+                        "D+2": lambda x: formatar_brasileiro(x),
+                        "D+3": lambda x: formatar_brasileiro(x),
+                        "Saldo Projetado": lambda x: formatar_brasileiro(x)
                     })
                     .to_html()
                 )
@@ -79,7 +87,7 @@ def executar():
                 <p>Abraços,<br>Ferramenta Automatizada</p>
                 """
 
-                # Gerar anexo Excel
+                # Gerar anexo Excel com valores numéricos (não formatados)
                 output = io.BytesIO()
                 df_final.to_excel(output, index=False)
                 output.seek(0)
