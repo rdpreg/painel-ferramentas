@@ -58,11 +58,11 @@ def executar():
         for col in ["Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"]:
             df_formatado[col] = df_formatado[col].apply(formatar_brasileiro)
 
-        # Exibir tabela estilizada com barra de rolagem horizontal
+        # Exibir tabela estilizada com scroll horizontal e vertical
         st.subheader("📊 Dados Processados (Saldo Projetado ≠ 0)")
         tabela_html = df_formatado.to_html(escape=False, index=False)
         tabela_com_scroll = f"""
-        <div style="overflow-x:auto; border:1px solid #ddd; padding:8px">
+        <div style="overflow:auto; max-height:500px; border:1px solid #ddd; padding:8px">
             {tabela_html}
         </div>
         """
