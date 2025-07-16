@@ -1,7 +1,7 @@
 import streamlit as st
 from ferramentas import relatorio_diario
 from ferramentas import aviso_rf
-from ferramentas import nnm_diario, painel_rotinas, aviso_aniversariantes, relatorio_cc
+from ferramentas import nnm_diario, painel_rotinas, aviso_aniversariantes, relatorio_cc, check_exclusao_base
 
 # Inicializa o menu padrão
 if "menu" not in st.session_state:
