@@ -60,8 +60,21 @@ def executar():
         emails_assessores = st.secrets["emails_assessores"]
         df_final["Email Assessor"] = df_final["Assessor"].map(emails_assessores)
 
+        # 🖥️ Formatar valores no padrão brasileiro e aplicar cores (para exibir no app)
+        df_formatado = df_final.copy()
+        for col in ["Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"]:
+            df_formatado[col] = df_formatado[col].apply(formatar_brasileiro)
+
+        # Exibir tabela com scroll e formatação
         st.subheader("📊 Dados Processados (Saldo Projetado ≠ 0)")
-        st.dataframe(df_final, use_container_width=True)
+        tabela_html = df_formatado.drop(columns=["Email Assessor"]).to_html(escape=False, index=False)
+        tabela_com_scroll = f"""
+        <div style="overflow:auto; max-height:500px; border:1px solid #ddd; padding:8px">
+            {tabela_html}
+        </div>
+        """
+        st.markdown(tabela_com_scroll, unsafe_allow_html=True)
+
         st.success(f"✅ {df_final.shape[0]} clientes com Saldo Projetado ≠ 0 processados com sucesso.")
 
         if st.button("📧 Enviar e-mails aos assessores"):
@@ -103,7 +116,7 @@ def executar():
                 <p>Abraços,<br>Equipe Convexa</p>
                 """
 
-                # Gerar anexo Excel (números puros para cálculos)
+                # Gerar anexo Excel com números puros
                 output = io.BytesIO()
                 grupo.drop(columns=["Email Assessor"]).to_excel(output, index=False)
                 output.seek(0)
