@@ -30,25 +30,34 @@ def executar():
         # Preencher valores nulos com 0
         df_merged.fillna(0, inplace=True)
 
-        # Calcular colunas de saldo total por dia
-        df_merged["Saldo + D+1"] = df_merged["Saldo CC"] + df_merged["D+1"]
-        df_merged["Saldo + D+2"] = df_merged["Saldo + D+1"] + df_merged["D+2"]
-        df_merged["Saldo + D+3"] = df_merged["Saldo + D+2"] + df_merged["D+3"]
+        # Calcular coluna Saldo Projetado
+        df_merged["Saldo Projetado"] = (
+            df_merged["Saldo CC"] +
+            df_merged["D+1"] +
+            df_merged["D+2"] +
+            df_merged["D+3"]
+        )
+
+        # Selecionar apenas as colunas desejadas
+        df_final = df_merged[[
+            "Conta Cliente", "Nome Cliente", "Assessor",
+            "Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"
+        ]]
 
         # Mostrar dados processados
         st.subheader("📊 Dados Processados")
-        st.dataframe(df_merged.round(2), use_container_width=True)
+        st.dataframe(df_final.round(2), use_container_width=True)
 
-        st.success(f"✅ {df_merged.shape[0]} clientes processados com sucesso.")
+        st.success(f"✅ {df_final.shape[0]} clientes processados com sucesso.")
 
         if st.button("📧 Enviar e-mail de teste para Rafael"):
             email_remetente = st.secrets["email"]["remetente"]
             senha_app = st.secrets["email"]["senha_app"]
 
             try:
-                # Gerar HTML com toda a tabela consolidada
+                # Gerar HTML com a tabela final
                 html_tabela = (
-                    df_merged
+                    df_final
                     .reset_index(drop=True)
                     .style
                     .format({
@@ -56,9 +65,7 @@ def executar():
                         "D+1": "R$ {:,.2f}",
                         "D+2": "R$ {:,.2f}",
                         "D+3": "R$ {:,.2f}",
-                        "Saldo + D+1": "R$ {:,.2f}",
-                        "Saldo + D+2": "R$ {:,.2f}",
-                        "Saldo + D+3": "R$ {:,.2f}"
+                        "Saldo Projetado": "R$ {:,.2f}"
                     })
                     .to_html()
                 )
@@ -72,7 +79,7 @@ def executar():
 
                 # Gerar anexo Excel
                 output = io.BytesIO()
-                df_merged.to_excel(output, index=False)
+                df_final.to_excel(output, index=False)
                 output.seek(0)
 
                 # Montar e-mail
