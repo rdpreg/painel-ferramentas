@@ -29,7 +29,7 @@ def executar():
                 st.error(f"❌ A coluna '{coluna_chave}' não foi encontrada nos arquivos.")
                 return
 
-            # Função de limpeza com os filtros fixos
+            # Função de limpeza com filtros aplicados apenas se as colunas existirem
             def limpar_dataframe(df):
                 df = df.copy()
 
@@ -42,19 +42,24 @@ def executar():
                     .str.replace(",", "", regex=False)
                 )
 
-                # Aplicar filtros para excluir linhas
-                filtros_excluir = (
-                    (df["Posição"] == "Posição D-1") |
-                    (df["CARTEIRA"].isna()) |
-                    (df["CARTEIRA"].str.lower() == "(em branco)") |
-                    (df["tipo_conta"] == "Outros") |
-                    (df["cart_adm"] == "Outros") |
-                    (df["NR_CONTA"].isna()) |
-                    (df["TIPO_LANCAMENTO"].isin(["ED", "ET", "Liquidação Doador"]))
-                )
+                # Filtros inteligentes
+                filtros_excluir = pd.Series([False] * len(df))
+                if "Posição" in df.columns:
+                    filtros_excluir |= (df["Posição"] == "Posição D-1")
+                if "CARTEIRA" in df.columns:
+                    filtros_excluir |= (df["CARTEIRA"].isna()) | (df["CARTEIRA"].str.lower() == "(em branco)")
+                if "tipo_conta" in df.columns:
+                    filtros_excluir |= (df["tipo_conta"] == "Outros")
+                if "cart_adm" in df.columns:
+                    filtros_excluir |= (df["cart_adm"] == "Outros")
+                if "NR_CONTA" in df.columns:
+                    filtros_excluir |= df["NR_CONTA"].isna()
+                if "TIPO_LANCAMENTO" in df.columns:
+                    filtros_excluir |= df["TIPO_LANCAMENTO"].isin(["ED", "ET", "Liquidação Doador"])
+
                 df = df[~filtros_excluir]
 
-                # Excluir linhas onde Conta está vazia
+                # Excluir linhas onde Conta está vazia ou com filtros aplicados
                 df = df[df[coluna_chave].notna()]
                 df = df[~df[coluna_chave].str.lower().str.contains("applied filter")]
 
