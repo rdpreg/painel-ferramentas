@@ -37,15 +37,7 @@ def executar():
 
         # Mostrar dados processados
         st.subheader("📊 Dados Processados")
-        st.dataframe(df_merged.style.format({
-            "Saldo CC": "R$ {:,.2f}",
-            "D+1": "R$ {:,.2f}",
-            "D+2": "R$ {:,.2f}",
-            "D+3": "R$ {:,.2f}",
-            "Saldo + D+1": "R$ {:,.2f}",
-            "Saldo + D+2": "R$ {:,.2f}",
-            "Saldo + D+3": "R$ {:,.2f}"
-        }), use_container_width=True)
+        st.dataframe(df_merged.round(2), use_container_width=True)
 
         st.success(f"✅ {df_merged.shape[0]} clientes processados com sucesso.")
 
