@@ -9,7 +9,11 @@ from email.utils import formataddr
 import io
 
 def formatar_brasileiro(valor):
-    return f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
+    """Formata número no padrão brasileiro com R$"""
+    texto = f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
+    if valor < 0:
+        return f"<span style='color: red;'>{texto}</span>"
+    return texto
 
 def executar():
     st.title("💸 Envio de Fluxo Financeiro (Modo Teste)")
@@ -49,14 +53,22 @@ def executar():
             "Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"
         ]]
 
-        # Formatar valores para BR
-        df_formatado = df_final.copy()
-        for col in ["Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"]:
-            df_formatado[col] = df_formatado[col].apply(formatar_brasileiro)
+        # Mostrar dados processados com valores formatados e negativos em vermelho
+        def destacar_negativos(val):
+            color = 'red' if val < 0 else 'black'
+            return f"color: {color}"
 
-        # Mostrar dados processados
         st.subheader("📊 Dados Processados (Saldo Projetado ≠ 0)")
-        st.dataframe(df_formatado, use_container_width=True)
+        st.dataframe(
+            df_final.style.format({
+                "Saldo CC": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."),
+                "D+1": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."),
+                "D+2": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."),
+                "D+3": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."),
+                "Saldo Projetado": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
+            }).applymap(lambda x: 'color: red' if isinstance(x, (int, float)) and x < 0 else 'color: black'),
+            use_container_width=True
+        )
 
         st.success(f"✅ {df_final.shape[0]} clientes com Saldo Projetado ≠ 0 processados com sucesso.")
 
@@ -65,18 +77,19 @@ def executar():
             senha_app = st.secrets["email"]["senha_app"]
 
             try:
-                # Gerar HTML com a tabela final (formatada BR)
+                # Gerar HTML com a tabela final (valores formatados e negativos em vermelho)
                 html_tabela = (
                     df_final
                     .reset_index(drop=True)
                     .style
                     .format({
-                        "Saldo CC": lambda x: formatar_brasileiro(x),
-                        "D+1": lambda x: formatar_brasileiro(x),
-                        "D+2": lambda x: formatar_brasileiro(x),
-                        "D+3": lambda x: formatar_brasileiro(x),
-                        "Saldo Projetado": lambda x: formatar_brasileiro(x)
+                        "Saldo CC": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."),
+                        "D+1": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."),
+                        "D+2": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."),
+                        "D+3": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."),
+                        "Saldo Projetado": lambda x: f"R$ {x:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
                     })
+                    .applymap(lambda x: 'color: red;' if isinstance(x, (int, float)) and x < 0 else 'color: black;')
                     .to_html()
                 )
 
@@ -87,7 +100,7 @@ def executar():
                 <p>Abraços,<br>Ferramenta Automatizada</p>
                 """
 
-                # Gerar anexo Excel com valores numéricos (não formatados)
+                # Gerar anexo Excel (números puros para cálculos)
                 output = io.BytesIO()
                 df_final.to_excel(output, index=False)
                 output.seek(0)
