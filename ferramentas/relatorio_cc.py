@@ -53,9 +53,15 @@ def executar():
             "Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"
         ]]
 
-        # Mostrar dados processados
+        # 🖥️ Formatar valores no padrão brasileiro e aplicar cores
+        df_formatado = df_final.copy()
+        for col in ["Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"]:
+            df_formatado[col] = df_formatado[col].apply(formatar_brasileiro)
+
+        # Exibir tabela estilizada no app
         st.subheader("📊 Dados Processados (Saldo Projetado ≠ 0)")
-        st.dataframe(df_final, use_container_width=True)
+        tabela_html = df_formatado.to_html(escape=False, index=False)
+        st.markdown(tabela_html, unsafe_allow_html=True)
 
         st.success(f"✅ {df_final.shape[0]} clientes com Saldo Projetado ≠ 0 processados com sucesso.")
 
