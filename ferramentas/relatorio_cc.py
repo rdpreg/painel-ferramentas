@@ -58,10 +58,15 @@ def executar():
         for col in ["Saldo CC", "D+1", "D+2", "D+3", "Saldo Projetado"]:
             df_formatado[col] = df_formatado[col].apply(formatar_brasileiro)
 
-        # Exibir tabela estilizada no app
+        # Exibir tabela estilizada com barra de rolagem horizontal
         st.subheader("📊 Dados Processados (Saldo Projetado ≠ 0)")
         tabela_html = df_formatado.to_html(escape=False, index=False)
-        st.markdown(tabela_html, unsafe_allow_html=True)
+        tabela_com_scroll = f"""
+        <div style="overflow-x:auto; border:1px solid #ddd; padding:8px">
+            {tabela_html}
+        </div>
+        """
+        st.markdown(tabela_com_scroll, unsafe_allow_html=True)
 
         st.success(f"✅ {df_final.shape[0]} clientes com Saldo Projetado ≠ 0 processados com sucesso.")
 
