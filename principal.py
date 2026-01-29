@@ -30,6 +30,9 @@ if st.sidebar.button("Relatório de Conta-Corrente"):
 if st.sidebar.button("Check Base de Clientes"):
     st.session_state.menu = "check_exclusao_base"
 
+if st.sidebar.button("Check Base de Clientes"):
+    st.session_state.menu = "relatori_cc_v1"
+
 # TELA PRINCIPAL
 if st.session_state.menu == "rotinas":
     painel_rotinas.executar()
@@ -50,6 +53,9 @@ elif st.session_state.menu == "relatorio_cc":
     relatorio_cc.executar()
 
 elif st.session_state.menu == "check_exclusao_base":
+    check_exclusao_base.executar()
+
+elif st.session_state.menu == "relatori_cc_v1":
     check_exclusao_base.executar()
 
 
